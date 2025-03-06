@@ -62,9 +62,26 @@ class CarModel:
         """
         row = CURSOR.execute(sql, (id,)).fetchone()
         if row:
-            return cls.instance_from_db()
+            return cls.instance_from_db(row)
         else:
             return None
+
+
+    def save(self):
+        sql = """
+            INSERT INTO car_models (
+                model_name,
+                year,
+                brand_id
+            )
+            VALUES (?, ?, ?)
+        """
+
+    @classmethod
+    def create(cls, model_name, year, brand_id):
+        car_model = cls(model_name, year, brand_id)
+        car_model.save()
+        return car_model
 
     # Car model belongs to brand
     def brand(self):
@@ -79,9 +96,37 @@ class CarModel:
             return Brand.instance_from_db(row)
         else:
             return None
-    # @property
-    # def model_name(self):
-    #     return self._model_name
 
-    # @model_name.setter
-    # def model_name(self, value):
+    @property
+    def model_name_getter(self):
+        return self._model_name
+
+    @model_name_getter.setter
+    def model_name(self, value):
+        if (type(value) == str) and (len(value) > 0):
+            self._model_name = value
+        else:
+            raise Exception("Error: Model name must be a string that is at least 1 character long")
+
+    @property
+    def year_getter(self):
+        return self._year
+
+    @year_getter.setter
+    def year(self, value):
+        if (type(value) == str) and len((value) >= 4):
+            self._year = value
+        else:
+            raise Exception("Error: Year must be an integer that is at least 4 characters long")
+
+
+    @property
+    def brand_id_getter(self):
+        return self._brand_id
+
+    @brand_id_getter.setter
+    def brand_id(self, value):
+        if (type(value) == str) and len((value) > 0):
+            self._brand_id = value
+        else:
+            raise Exception("Error: Brand ID must be an integer that is at least 1 character long")
