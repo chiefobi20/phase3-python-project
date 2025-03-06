@@ -128,4 +128,4 @@ class Brand:
         if (type(value) == str) and (len(value) > 4):
             self._country = value
         else:
-            raise Exception("Error: Name must be a string that is at least 4 characters long")
+            raise Exception("Error: Country must be a string that is at least 4 characters long")
