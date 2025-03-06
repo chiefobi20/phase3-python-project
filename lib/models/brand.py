@@ -113,10 +113,10 @@ class Brand:
 
     @name_getter.setter
     def name(self, value):
-        if (type(value) == str) and (len(value) >= 4):
+        if (type(value) == str) and (len(value) > 0):
             self._name = value
         else:
-            raise Exception("Error: Name must be a string that is at least 4 characters long")
+            raise Exception("Error: Name must be a string that is at least 1 character long")
 
 
     @property
@@ -125,7 +125,7 @@ class Brand:
 
     @country_getter.setter
     def country(self, value):
-        if (type(value) == str) and (len(value) >= 4):
+        if (type(value) == str) and (len(value) > 4):
             self._country = value
         else:
             raise Exception("Error: Name must be a string that is at least 4 characters long")

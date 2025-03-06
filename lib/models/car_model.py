@@ -76,12 +76,29 @@ class CarModel:
             )
             VALUES (?, ?, ?)
         """
+        CURSOR.execute(sql, (self.model_name, self.year, self.brand_id))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        CarModel.all.append(self)
 
     @classmethod
     def create(cls, model_name, year, brand_id):
         car_model = cls(model_name, year, brand_id)
         car_model.save()
         return car_model
+
+
+    def delete(self):
+        sql = """
+            DELETE FROM car_models
+            WHERE id = ?
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+        CarModel.all = [model for model in CarModel.all if model.id != self.id]
 
     # Car model belongs to brand
     def brand(self):
@@ -114,10 +131,10 @@ class CarModel:
 
     @year_getter.setter
     def year(self, value):
-        if (type(value) == str) and len((value) >= 4):
+        if (type(value) == int):
             self._year = value
         else:
-            raise Exception("Error: Year must be an integer that is at least 4 characters long")
+            raise Exception("Error: Year must be an integer")
 
 
     @property
@@ -126,7 +143,7 @@ class CarModel:
 
     @brand_id_getter.setter
     def brand_id(self, value):
-        if (type(value) == str) and len((value) > 0):
+        if (type(value) == int):
             self._brand_id = value
         else:
-            raise Exception("Error: Brand ID must be an integer that is at least 1 character long")
+            raise Exception("Error: Brand ID must be an integer")
